@@ -11,20 +11,20 @@ const productos = [
 
 // 1. Mostrar todos los productos
 function mostrarProductos() {
-  console.log("📦 LISTA DE PRODUCTOS:");
+  console.log("LISTA DE PRODUCTOS:");
   productos.forEach(p => console.log(p));
 }
 
 // 2. Productos con stock bajo (<5)
 function stockBajo() {
   const bajos = productos.filter(p => p.stock < 5 && p.stock > 0);
-  console.log("⚠️ STOCK BAJO:", bajos);
+  console.log(" STOCK BAJO:", bajos);
 }
 
 // 3. Productos agotados
 function productosAgotados() {
   const agotados = productos.filter(p => p.stock === 0);
-  console.log("❌ AGOTADOS:", agotados);
+  console.log(" AGOTADOS:", agotados);
 }
 
 // 4. Lista de nombres y precios
@@ -36,25 +36,25 @@ function nombresPrecios() {
 // 5. Valor total del inventario
 function valorInventario() {
   const total = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
-  console.log("💰 VALOR INVENTARIO:", total);
+  console.log(" VALOR INVENTARIO:", total);
 }
 
 // 6. Total ventas
 function totalVentas() {
   const total = productos.reduce((acc, p) => acc + p.ventas, 0);
-  console.log("📊 TOTAL VENTAS:", total);
+  console.log(" TOTAL VENTAS:", total);
 }
 
 // 7. Ordenar por precio
 function ordenarPrecio() {
   const ordenados = [...productos].sort((a, b) => a.precio - b.precio);
-  console.log("📉 ORDENADOS POR PRECIO:", ordenados);
+  console.log(" ORDENADOS POR PRECIO:", ordenados);
 }
 
 // 8. Buscar producto
 function buscarProducto(nombre) {
   const encontrado = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
-  console.log("🔍 RESULTADO:", encontrado || "No encontrado");
+  console.log(" RESULTADO:", encontrado || "No encontrado");
 }
 
 // 9. Verificaciones
@@ -87,7 +87,7 @@ function clasificarProducto(nombre) {
       rango = "Alto";
   }
 
-  console.log(`🏷️ ${producto.nombre} es ${rango}`);
+  console.log(` ${producto.nombre} es ${rango}`);
 }
 
 // ================= COMBINACIONES =================
@@ -98,7 +98,7 @@ function disponiblesOrdenados() {
     .filter(p => p.stock > 0)
     .sort((a, b) => a.precio - b.precio);
 
-  console.log("✅ DISPONIBLES ORDENADOS:", resultado);
+  console.log(" DISPONIBLES ORDENADOS:", resultado);
 }
 
 // 2. Agotados con mensaje
@@ -107,19 +107,19 @@ function mensajesReabastecimiento() {
     .filter(p => p.stock === 0)
     .map(p => `Reabastecer ${p.nombre}`);
 
-  console.log("📢 MENSAJES:", mensajes);
+  console.log(" MENSAJES:", mensajes);
 }
 
 // 3. Dinero por vender todo el stock
 function dineroPotencial() {
   const total = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
-  console.log("💸 DINERO POTENCIAL:", total);
+  console.log(" DINERO POTENCIAL:", total);
 }
 
 // 4. Producto más vendido
 function productoMasVendido() {
   const masVendido = [...productos].sort((a, b) => b.ventas - a.ventas)[0];
-  console.log("🏆 MÁS VENDIDO:", masVendido);
+  console.log(" MÁS VENDIDO:", masVendido);
 }
 
 // ================= REPORTE FINAL =================
@@ -132,7 +132,7 @@ function reporteFinal() {
   const totalVendidas = productos.reduce((acc, p) => acc + p.ventas, 0);
   const agotados = productos.filter(p => p.stock === 0).length;
 
-  console.log("📊 REPORTE FINAL:");
+  console.log(" REPORTE FINAL:");
   console.log("Más caro:", masCaro);
   console.log("Más barato:", masBarato);
   console.log("Más vendido:", masVendido);
