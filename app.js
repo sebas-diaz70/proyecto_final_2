@@ -90,7 +90,7 @@ function clasificarProducto(nombre) {
   console.log(` ${producto.nombre} es ${rango}`);
 }
 
-// ================= COMBINACIONES =================
+//  COMBINACIONES 
 
 // 1. Stock > 0 ordenados por precio
 function disponiblesOrdenados() {
