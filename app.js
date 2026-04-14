@@ -7,88 +7,192 @@ const productos = [
   { id: 5, nombre: "Diadema", categoria: "Audio", precio: 90000, stock: 8, ventas: 6 }
 ];
 
+// ================= LIBRERÍA =================
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
 // ================= FUNCIONES =================
 
-// 1. Mostrar todos los productos
 function mostrarProductos() {
-  console.log("LISTA DE PRODUCTOS:");
-  productos.forEach(p => console.log(p));
+  console.log("\n LISTA DE PRODUCTOS:");
+  console.table(productos);
 }
 
-// 2. Productos con stock bajo (<5)
 function stockBajo() {
   const bajos = productos.filter(p => p.stock < 5 && p.stock > 0);
-  console.log(" STOCK BAJO:", bajos);
+  console.log("\n STOCK BAJO:");
+  console.table(bajos);
 }
 
-// 3. Productos agotados
 function productosAgotados() {
   const agotados = productos.filter(p => p.stock === 0);
-  console.log(" AGOTADOS:", agotados);
+  console.log("\n AGOTADOS:");
+  console.table(agotados);
 }
 
-// 4. Lista de nombres y precios
 function nombresPrecios() {
   const lista = productos.map(p => `${p.nombre} - $${p.precio}`);
-  console.log("💲 LISTA:", lista);
+  console.log("\n LISTA:");
+  console.log(lista);
 }
 
-// 5. Valor total del inventario
 function valorInventario() {
   const total = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
-  console.log(" VALOR INVENTARIO:", total);
+  console.log("\n VALOR INVENTARIO:", total);
 }
 
-// 6. Total ventas
 function totalVentas() {
   const total = productos.reduce((acc, p) => acc + p.ventas, 0);
-  console.log(" TOTAL VENTAS:", total);
+  console.log("\n TOTAL VENTAS:", total);
 }
 
-// 7. Ordenar por precio
 function ordenarPrecio() {
   const ordenados = [...productos].sort((a, b) => a.precio - b.precio);
-  console.log(" ORDENADOS POR PRECIO:", ordenados);
+  console.log("\n ORDENADOS POR PRECIO:");
+  console.table(ordenados);
 }
 
-// 8. Buscar producto
-function buscarProducto(nombre) {
-  const encontrado = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
-  console.log(" RESULTADO:", encontrado || "No encontrado");
+function buscarProducto(callback) {
+  rl.question(" Ingrese nombre: ", (nombre) => {
+    const encontrado = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+    console.log("\n RESULTADO:", encontrado || "No encontrado");
+    callback();
+  });
 }
 
-// 9. Verificaciones
 function verificaciones() {
   const hayAgotados = productos.some(p => p.stock === 0);
   const todosStock = productos.every(p => p.stock > 0);
 
-  console.log("¿Hay agotados?:", hayAgotados);
+  console.log("\n¿Hay agotados?:", hayAgotados);
   console.log("¿Todos tienen stock?:", todosStock);
 }
 
-// 10. Clasificación por precio
-function clasificarProducto(nombre) {
-  const producto = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+function clasificarProducto(callback) {
+  rl.question(" Nombre del producto: ", (nombre) => {
+    const producto = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
 
-  if (!producto) {
-    console.log("Producto no encontrado");
-    return;
-  }
+    if (!producto) {
+      console.log("Producto no encontrado");
+      return callback();
+    }
 
-  let rango;
-  switch (true) {
-    case producto.precio < 50000:
-      rango = "Económico";
-      break;
-    case producto.precio <= 150000:
-      rango = "Medio";
-      break;
-    default:
-      rango = "Alto";
-  }
+    let rango;
+    switch (true) {
+      case producto.precio < 50000:
+        rango = "Económico";
+        break;
+      case producto.precio <= 150000:
+        rango = "Medio";
+        break;
+      default:
+        rango = "Alto";
+    }
 
-  console.log(` ${producto.nombre} es ${rango}`);
+    console.log(`\n${producto.nombre} es ${rango}`);
+    callback();
+  });
 }
+
+function reporteFinal() {
+  const masCaro = productos.reduce((a, b) => a.precio > b.precio ? a : b);
+  const masBarato = productos.reduce((a, b) => a.precio < b.precio ? a : b);
+  const masVendido = productos.reduce((a, b) => a.ventas > b.ventas ? a : b);
+  const valorTotal = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
+  const totalVendidas = productos.reduce((acc, p) => acc + p.ventas, 0);
+  const agotados = productos.filter(p => p.stock === 0).length;
+
+  console.log("\n REPORTE FINAL:");
+  console.log("Más caro:", masCaro);
+  console.log("Más barato:", masBarato);
+  console.log("Más vendido:", masVendido);
+  console.log("Valor inventario:", valorTotal);
+  console.log("Total vendidos:", totalVendidas);
+  console.log("Productos agotados:", agotados);
+}
+
+// ================= MENÚ =================
+
+function menu() {
+  console.log(`
+========= MENÚ =========
+1. Ver productos
+2. Stock bajo
+3. Agotados
+4. Lista nombres y precios
+5. Valor inventario
+6. Total ventas
+7. Ordenar por precio
+8. Buscar producto
+9. Verificaciones
+10. Clasificar producto
+11. Reporte final
+0. Salir
+========================
+`);
+
+  rl.question(" Elige una opción: ", (opcion) => {
+    switch (parseInt(opcion)) {
+      case 1:
+        mostrarProductos();
+        return menu();
+
+      case 2:
+        stockBajo();
+        return menu();
+
+      case 3:
+        productosAgotados();
+        return menu();
+
+      case 4:
+        nombresPrecios();
+        return menu();
+
+      case 5:
+        valorInventario();
+        return menu();
+
+      case 6:
+        totalVentas();
+        return menu();
+
+      case 7:
+        ordenarPrecio();
+        return menu();
+
+      case 8:
+        return buscarProducto(menu);
+
+      case 9:
+        verificaciones();
+        return menu();
+
+      case 10:
+        return clasificarProducto(menu);
+
+      case 11:
+        reporteFinal();
+        return menu();
+
+      case 0:
+        console.log(" Saliendo...");
+        rl.close();
+        break;
+
+      default:
+        console.log(" Opción inválida");
+        menu();
+    }
+  });
+}
+
+// INICIAR APP
+menu();}
 
 //  COMBINACIONES 
 
